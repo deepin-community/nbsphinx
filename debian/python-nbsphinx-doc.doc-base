@@ -1,0 +1,18 @@
+Document: nbsphinx
+Title: Jupyter Notebook Tools for Sphinx
+Author:
+ Matthias Geier
+Abstract:
+ nbsphinx is a Sphinx extension that provides a source parser for *.ipynb
+ files. Custom Sphinx directives are used to show Jupyter Notebook code cells
+ (and of course their results) in both HTML and LaTeX output.
+ Un-evaluated notebooks, i.e., notebooks without stored output cells, will be
+ automatically executed during the Sphinx build process.
+Section: Programming/Python
+
+Format: PDF
+Files: /usr/share/doc/python-nbsphinx/nbsphinx.pdf
+
+Format: HTML
+Index: /usr/share/doc/python-nbsphinx/html/index.html
+Files: /usr/share/doc/python-nbsphinx/html/*

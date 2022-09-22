@@ -1,0 +1,51 @@
+Description: debianization: documentation
+ Meant to address Debian specific requirements and stuff for documentation.
+Origin: vendor, Debian
+Forwarded: not-needed
+Author: Jerome Benoit <calculus@rezozer.net>
+Last-Update: 2020-12-13
+
+--- a/doc/conf.py
++++ b/doc/conf.py
+@@ -9,9 +9,19 @@
+     'sphinxcontrib.bibtex',  # for bibliographic references
+     'sphinxcontrib.rsvgconverter',  # for SVG->PDF conversion in LaTeX output
+     'sphinx_gallery.load_style',  # load CSS for gallery (needs SG >= 0.6)
+-    'sphinx_last_updated_by_git',  # get "last updated" from Git
+ ]
+ 
++## ad hoc:
++##  - allow offline build
++##  - allow usage of obsolete ipywidgets
++nbsphinx_allow_errors = True
++
++## see debian/rules for more information
++mathjax_path = 'mathjax/MathJax.js?config=tex-ams-mml_htmlormml'
++
++## Link or path to require.js
++nbsphinx_requirejs_path = '/usr/lib/nodejs/requirejs/require.js'
++
+ # Don't add .txt suffix to source files:
+ html_sourcelink_suffix = ''
+ 
+@@ -99,17 +109,10 @@
+ 
+ nitpicky = True
+ 
+-# -- Get version information and date from Git ----------------------------
++# -- Get version information and date from shell environment --------------
+ 
+-try:
+-    from subprocess import check_output
+-    release = check_output(['git', 'describe', '--tags', '--always'])
+-    release = release.decode().strip()
+-    today = check_output(['git', 'show', '-s', '--format=%ad', '--date=short'])
+-    today = today.decode().strip()
+-except Exception:
+-    release = '<unknown>'
+-    today = '<unknown date>'
++release = os.getenv('NBSPHINX_VERSION_RELEASE', '<unknown>')
++today = os.getenv('NBSPHINX_TODAY_DATETRIPLET', '<unknown date>')
+ 
+ # -- Options for HTML output ----------------------------------------------
+ 

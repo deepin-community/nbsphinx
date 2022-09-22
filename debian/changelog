@@ -1,0 +1,229 @@
+nbsphinx (0.8.7+ds-1) UNRELEASED; urgency=medium
+
+  * update
+
+ -- Debian Python Team <team+python@tracker.debian.org>  Thu, 16 Jun 2022 09:19:03 +0800
+
+nbsphinx (0.8.7+ds-1) unstable; urgency=medium
+
+  * Team upload.
+
+  [ Debian Janitor ]
+  * Remove obsolete field Name from debian/upstream/metadata (already present
+    in machine-readable debian/copyright).
+
+  [ Dmitry Shachnev ]
+  * New upstream release.
+    - Compatible with Jinja2 3.0 (closes: #995299).
+  * Remove python3-sphinx-copybutton dependency, no longer needed.
+  * Bump required python3-sphinxcontrib.bibtex version to 2.1.
+  * Refresh debian/patches/debianization-documentation.patch.
+  * Add a patch to remove documentation pages that need jupytext.
+  * Build-depend on tex-gyre, needed to build PDF with Sphinx 4.
+
+ -- Dmitry Shachnev <mitya57@debian.org>  Mon, 04 Oct 2021 13:20:08 +0300
+
+nbsphinx (0.8.0+ds-1) unstable; urgency=medium
+
+  [ Ondřej Nový ]
+  * d/control: Update Maintainer field with new Debian Python Team
+    contact address.
+  * d/control: Update Vcs-* fields with new Debian Python Team Salsa
+    layout.
+
+  [ Jerome Benoit ]
+  * New upstream minor version.
+  * Debianization: WIP: depends on recent version of python3-ipywidgets
+    - d/copyright:
+      - copyright year tuples, update;
+    - d/control:
+      - debhelper, bump to version 13 (no change);
+      - Standards-Version, bump to version 4.5.1 (no change);
+      - Build-Depends-Indep, update;
+      - python-nbsphinx-doc, Built-Using field, introduce;
+    - d/rules:
+      - NBSPHINX_VERSION_RELEASE variable, harden;
+    - d/patches/*:
+      - d/p/upstream-missing-references_bib.patch , obsoleted;
+      - d/p/debianization-documentation.patch:
+        - doc/conf.py, nbsphinx_allow_errors set to True (Closes: #964204);
+        - refresh;
+    - d/tests/control, refresh;
+    - d/{python3-nbsphinx,python-nbsphinx-doc}.lintian-overrides, discard
+      (no-upstream-changelog tag now unknown).
+
+ -- Jerome Benoit <calculus@rezozer.net>  Sun, 13 Dec 2020 14:31:40 +0000
+
+nbsphinx (0.4.3+ds-1) unstable; urgency=medium
+
+  * New upstream version.
+  * Debianization:
+    - debian/control:
+      - Standards-Version, bump to version 4.4.1 (no change);
+      - Build-Depends-Indep field, update;
+    - debian/patches/*:
+      - d/p/upstream-missing-references_bib.patch, introduce;
+      - d/p/319.patch, no mmore needed;
+      - d/p/debianization-documentation.patch, refresh;
+    - debian/rules:
+      - override_dh_sphinxdoc target, add LaTeX support;
+    - debian/adhoc/*, refresh;
+    - debian/tests/*:
+      - d/t/control, dependencies, update.
+
+ -- Jerome Benoit <calculus@rezozer.net>  Sat, 05 Oct 2019 10:42:21 +0000
+
+nbsphinx (0.4.2+ds-3) unstable; urgency=medium
+
+  * Debianization:
+    - Python 2 removal (Closes: #939492);
+    - debian/adhoc/*, refresh.
+
+ -- Jerome Benoit <calculus@rezozer.net>  Fri, 27 Sep 2019 15:03:39 +0000
+
+nbsphinx (0.4.2+ds-2) unstable; urgency=medium
+
+  [ Ondřej Nový ]
+  * Use debhelper-compat instead of debian/compat.
+  * Bump Standards-Version to 4.4.0.
+
+  [ Gianfranco Costamagna ]
+  * Team upload
+  * debian/patches/319.patch:
+    - upstream fix for the svg->png conversion failure with new pandoc
+    https://github.com/spatialaudio/nbsphinx/issues/317
+  * Add new package svg2pdfconverter to finally fix the latex images
+    Closes: #939492
+
+ -- Gianfranco Costamagna <locutusofborg@debian.org>  Fri, 13 Sep 2019 17:49:38 +0200
+
+nbsphinx (0.4.2+ds-1) unstable; urgency=medium
+
+  * New upstream version (re-establish Python 2 compatibility).
+  * Debianization (idem).
+
+ -- Jerome Benoit <calculus@rezozer.net>  Fri, 25 Jan 2019 05:53:44 +0000
+
+nbsphinx (0.4.1+ds-3) unstable; urgency=medium
+
+  * Debianization:
+    - debian/copyright:
+      - Copyright year-tuple, refresh;
+    - debian/control:
+      - Depends field, harden;
+      - Recommends field, introduce;
+    - debian/tests/*:
+      - d/t/{control,perform-doc}, introduce.
+
+ -- Jerome Benoit <calculus@rezozer.net>  Tue, 01 Jan 2019 10:10:09 +0000
+
+nbsphinx (0.4.1+ds-2) unstable; urgency=medium
+
+  * Drop Python 2 support as it is no more supported upstream.
+  * Debianization:
+    - Python 2 support, drop;
+    - debian/control:
+      - Testsuite field, introduce.
+
+ -- Jerome Benoit <calculus@rezozer.net>  Thu, 27 Dec 2018 08:14:26 +0000
+
+nbsphinx (0.4.1+ds-1) unstable; urgency=medium
+
+  * New upstream version.
+  * Debianization:
+    - debian/copyright:
+      - mybinder material, refresh;
+    - debian/control:
+      - Standards-Version, bump to 4.3.0;
+    - debian/patches/*:
+      - d/p/debianization-documentation.patch, refresh;
+    - debian/adhoc/lintian/privacy-breach/*:
+      - d/a/l/p/common.sed , refresh;
+      - d/a/l/p/www/mybinder/badge_logo.svg, import.
+      - d/a/l/p/www/mybinder/badge.svg, remove;
+    - debian/rules:
+      - target override_dh_sphinxdoc, harden.
+
+ -- Jerome Benoit <calculus@rezozer.net>  Wed, 26 Dec 2018 10:37:35 +0000
+
+nbsphinx (0.3.5+ds-1) unstable; urgency=medium
+
+  * New upstream version.
+  * Debianization:
+    - debian/patches/*:
+      - d/p/debianization-documentation.patch , refresh;
+    - debian/rules:
+      - get-info target: introduce;
+      - NBSPHINX_TODAY_DATETRIPLET variable, introduce (see patch);
+      - override_dh_sphinxdoc target, compliance with dh 11;
+    - debian/python-nbsphinx-doc.{doc-base,links}, revisit wrt dh 11.
+
+ -- Jerome Benoit <calculus@rezozer.net>  Wed, 31 Oct 2018 02:43:46 +0000
+
+nbsphinx (0.3.1+ds-2) unstable; urgency=medium
+
+  [ Jerome Benoit ]
+  * d/control: Secure Homepage URL
+  * d/control: Bump Standards-Version to 4.2.1 (no change)
+  * d/rules: Remove get-orig-source target
+
+  [ Ondřej Nový ]
+  * d/control: Set Vcs-* to salsa.debian.org
+  * d/copyright: Fix Format URL to correct one
+  * d/control: Remove ancient X-Python-Version field
+  * d/control: Remove ancient X-Python3-Version field
+  * Convert git repository from git-dpm to gbp layout
+  * Use 'python3 -m sphinx' instead of sphinx-build for building docs
+
+ -- Jerome Benoit <calculus@rezozer.net>  Fri, 26 Oct 2018 07:22:05 +0000
+
+nbsphinx (0.3.1+ds-1) unstable; urgency=medium
+
+  * New upstream version.
+  * Debianization:
+    - debian/copyright:
+      - copyright year tuples, update;
+      - Files-Excluded field, refresh;
+    - debian/watch, add compression=xz option;
+    - debian/control:
+      - debhelp, bump to 11;
+      - Standards-Version, bump to 4.1.3;
+    - debian/comp, bump to 11;
+    - debian/rules:
+      - override_dh_sphinxdoc target, refresh PYTHONPATH ;
+      - get-orig-source target, remove compression option;
+    - debian/adhoc/lintian/privacy-breach/*, update.
+
+ -- Jerome Benoit <calculus@rezozer.net>  Fri, 19 Jan 2018 21:11:51 +0000
+
+nbsphinx (0.2.14+ds-2) unstable; urgency=medium
+
+  * Debianization:
+    - debian/patches/update-for-sphinx.patch, integrated.
+
+ -- Jerome Benoit <calculus@rezozer.net>  Tue, 12 Sep 2017 04:38:50 +0000
+
+nbsphinx (0.2.14+ds-1) unstable; urgency=medium
+
+  * Upload to unstable.
+  * New upstream version (Closes: #874266).
+  * Debianization:
+    - debian/rules, use pkg-info.mk ;
+    - debian/copyright, refresh;
+    - debian/control:
+      - Standards Version, bump to 4.1.0 (no change).
+
+ -- Jerome Benoit <calculus@rezozer.net>  Fri, 08 Sep 2017 05:55:41 +0000
+
+nbsphinx (0.2.9+ds-2) unstable; urgency=medium
+
+  * Team upload.
+  * Backport upstream patch for latest sphinx version.
+
+ -- Ximin Luo <infinity0@debian.org>  Wed, 30 Nov 2016 16:32:28 +0100
+
+nbsphinx (0.2.9+ds-1) experimental; urgency=medium
+
+  * Initial release (Closes: #838806).
+
+ -- Jerome Benoit <calculus@rezozer.net>  Sun, 16 Oct 2016 03:37:54 +0000

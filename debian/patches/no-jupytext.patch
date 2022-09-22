@@ -1,0 +1,49 @@
+Description: exclude pages using jupytext from documentation
+ Jupytext is not packaged in Debian.
+Origin: vendor, Debian
+Forwarded: not-needed
+Author: Dmitry Shachnev <mitya57@debian.org>
+Last-Update: 2021-10-03
+
+--- a/doc/conf.py
++++ b/doc/conf.py
+@@ -87,12 +87,6 @@
+ 
+ bibtex_bibfiles = ['references.bib']
+ 
+-# Support for notebook formats other than .ipynb
+-nbsphinx_custom_formats = {
+-    '.pct.py': ['jupytext.reads', {'fmt': 'py:percent'}],
+-    '.md': ['jupytext.reads', {'fmt': 'Rmd'}],
+-}
+-
+ # -- The settings below this line are not specific to nbsphinx ------------
+ 
+ master_doc = 'index'
+--- a/doc/index.rst
++++ b/doc/index.rst
+@@ -5,12 +5,6 @@
+ except for the sections :doc:`a-normal-rst-file`,
+ :doc:`contributing` and :doc:`version-history`,
+ which were generated from Sphinx's built-in `reStructuredText`__ format.
+-The sections
+-:doc:`custom-formats`,
+-:doc:`gallery/due-rst` and
+-:doc:`a-markdown-file`
+-are using alternative storage formats for Jupyter notebooks,
+-see :doc:`custom-formats` for details.
+ 
+ __ https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
+ 
+@@ -26,11 +20,9 @@
+     hidden-cells
+     executing-notebooks
+     prolog-and-epilog
+-    custom-formats
+     subdir/*
+     custom-css
+     a-normal-rst-file
+-    a-markdown-file
+     links
+     contributing
+     version-history

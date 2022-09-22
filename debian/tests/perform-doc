@@ -1,0 +1,14 @@
+#!/bin/sh
+# autopkgtest check: use doc as demo
+set -ue
+
+cp -prd README.rst doc $AUTOPKGTEST_TMP
+
+cd $AUTOPKGTEST_TMP
+
+python3 -m sphinx -b html doc doc-html
+
+python3 -m sphinx -b latex doc doc-latex
+make -C doc-latex all-pdf
+
+exit 0

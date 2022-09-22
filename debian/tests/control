@@ -1,0 +1,17 @@
+Tests: perform-doc
+Depends:
+ pandoc,
+ python3-ipykernel,
+ python3-nbsphinx,
+ python3-sphinx-gallery,
+ python3-sphinxcontrib.bibtex (>= 2.1),
+ python3-sphinxcontrib.svg2pdfconverter,
+ python3-matplotlib,
+ python3-numpy,
+ python3-pandas,
+ tex-gyre,
+ texlive-fonts-recommended,
+ texlive-latex-recommended,
+ texlive-latex-extra,
+ latexmk
+Restrictions: allow-stderr
