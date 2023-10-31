@@ -1,2 +1,5 @@
 debianization-documentation.patch
 no-jupytext.patch
+skip_codeautolink
+no-ipywidgets.patch
+repro-docs

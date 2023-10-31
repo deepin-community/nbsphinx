@@ -1,20 +1,19 @@
 Source: nbsphinx
-Section: python
-Priority: optional
 Maintainer: Debian Python Team <team+python@tracker.debian.org>
 Uploaders: Jerome Benoit <calculus@rezozer.net>
-Rules-Requires-Root: no
-Build-Depends: debhelper-compat (= 13),
+Section: python
+Priority: optional
+Build-Depends: debhelper-compat (= 13)
 Build-Depends-Indep: dh-python,
                      node-requirejs,
                      libjs-mathjax,
                      pandoc,
-                     python3-all,
+                     python3-all:any,
                      python3-docutils,
                      python3-entrypoints,
                      python3-ipykernel,
                      python3-jupyter-client,
-                     python3-nbconvert (>=5.4-2),
+                     python3-nbconvert,
                      python3-nbformat,
                      python3-ipywidgets,
                      python3-setuptools,
@@ -34,20 +33,21 @@ Build-Depends-Indep: dh-python,
                      texlive-latex-extra,
                      lmodern,
                      latexmk
-Standards-Version: 4.5.1
-Homepage: https://nbsphinx.rtfd.org/
-Vcs-Git: https://salsa.debian.org/python-team/packages/nbsphinx.git
+Standards-Version: 4.6.2
 Vcs-Browser: https://salsa.debian.org/python-team/packages/nbsphinx
+Vcs-Git: https://salsa.debian.org/python-team/packages/nbsphinx.git
+Homepage: https://nbsphinx.rtfd.org/
+Rules-Requires-Root: no
 
 Package: python3-nbsphinx
 Architecture: all
-Depends: ${misc:Depends}, ${python3:Depends}
+Depends: ${misc:Depends},
+         ${python3:Depends}
+Recommends: python3-sphinxcontrib.bibtex,
+            python3-matplotlib,
+            python3-numpy,
+            python3-pandas
 Suggests: python-nbsphinx-doc (= ${source:Version})
-Recommends:
- python3-sphinxcontrib.bibtex,
- python3-matplotlib,
- python3-numpy,
- python3-pandas
 Description: Jupyter Notebook Tools for Sphinx -- Python 3
  nbsphinx is a Sphinx extension that provides a source parser for *.ipynb
  files. Custom Sphinx directives are used to show Jupyter Notebook code cells
@@ -58,12 +58,16 @@ Description: Jupyter Notebook Tools for Sphinx -- Python 3
  This package installs the library for Python 3.
 
 Package: python-nbsphinx-doc
-Section: doc
 Architecture: all
-Built-Using: ${sphinxdoc:Built-Using}
-Depends: node-requirejs, libjs-mathjax, ${misc:Depends}, ${sphinxdoc:Depends}
+Section: doc
+Depends: node-requirejs,
+         libjs-mathjax,
+         ${misc:Depends},
+         ${sphinxdoc:Depends}
 Suggests: www-browser
 Enhances: python3-nbsphinx (= ${source:Version})
+Built-Using: ${sphinxdoc:Built-Using}
+Multi-Arch: foreign
 Description: Jupyter Notebook Tools for Sphinx -- doc
  nbsphinx is a Sphinx extension that provides a source parser for *.ipynb
  files. Custom Sphinx directives are used to show Jupyter Notebook code cells
