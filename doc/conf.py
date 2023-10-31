@@ -1,6 +1,6 @@
 import os
 
-# Use sphinx-quickstart to create your own conf.py file!
+# You can use sphinx-quickstart to create your own conf.py file!
 # After that, you have to edit a few things.  See below.
 
 # Select nbsphinx and, if needed, other Sphinx extensions:
@@ -10,7 +10,18 @@ extensions = [
     'sphinxcontrib.rsvgconverter',  # for SVG->PDF conversion in LaTeX output
     'sphinx_gallery.load_style',  # load CSS for gallery (needs SG >= 0.6)
     'sphinx_last_updated_by_git',  # get "last updated" from Git
+    'sphinx_codeautolink',  # automatic links from code to documentation
+    'sphinx.ext.intersphinx',  # links to other Sphinx projects (e.g. NumPy)
 ]
+
+# These projects are also used for the sphinx_codeautolink extension:
+intersphinx_mapping = {
+    'IPython': ('https://ipython.readthedocs.io/en/stable/', None),
+    'matplotlib': ('https://matplotlib.org/', None),
+    'numpy': ('https://docs.scipy.org/doc/numpy/', None),
+    'pandas': ('https://pandas.pydata.org/docs/', None),
+    'python': ('https://docs.python.org/3/', None),
+}
 
 # Don't add .txt suffix to source files:
 html_sourcelink_suffix = ''
@@ -18,7 +29,6 @@ html_sourcelink_suffix = ''
 # List of arguments to be passed to the kernel that executes the notebooks:
 nbsphinx_execute_arguments = [
     "--InlineBackend.figure_formats={'svg', 'pdf'}",
-    "--InlineBackend.rc=figure.dpi=96",
 ]
 
 # Environment variables to be passed to the kernel:
@@ -83,6 +93,10 @@ nbsphinx_custom_formats = {
     '.md': ['jupytext.reads', {'fmt': 'Rmd'}],
 }
 
+# Import Matplotlib to avoid this message in notebooks:
+# "Matplotlib is building the font cache; this may take a moment."
+import matplotlib.pyplot
+
 # -- The settings below this line are not specific to nbsphinx ------------
 
 master_doc = 'index'
@@ -126,8 +140,6 @@ latex_elements = {
         %verbatimwithframe=false,
         %verbatimwrapslines=false,
         %verbatimhintsturnover=false,
-        VerbatimColor={HTML}{F5F5F5},
-        VerbatimBorderColor={HTML}{E0E0E0},
         noteBorderColor={HTML}{E0E0E0},
         noteborder=1.5pt,
         warningBorderColor={HTML}{E0E0E0},
@@ -143,9 +155,10 @@ latex_elements = {
 }{
     \renewcommand{\ttdefault}{lmtt}  % typewriter font from lmodern
 }
-\usepackage{booktabs}  % for Pandas dataframes
 """,
 }
+
+latex_table_style = ['booktabs']
 
 latex_documents = [
     (master_doc, 'nbsphinx.tex', project, author, 'howto'),
@@ -170,4 +183,4 @@ if 'html_theme' not in globals():
     else:
         html_theme = 'insipid'
         html_copy_source = False
-        html_permalinks_icon = '§'
+        html_permalinks_icon = '#'

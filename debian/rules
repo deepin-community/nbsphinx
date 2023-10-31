@@ -16,29 +16,29 @@ DEB_SPHINXDOC_DOCDIR=$(CURDIR)/debian/python-nbsphinx-doc/usr/share/doc/python-n
 DEB_SPHINXDOC_DOCHTMLDIR=$(DEB_SPHINXDOC_DOCDIR)/html
 DEB_SPHINXDOC_HTMLSEDDIR=$(CURDIR)/debian/adhoc/lintian/privacy-breach
 override_dh_sphinxdoc:
-#ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
-#	PYTHONPATH=$(CURDIR)/src python3 -m sphinx -b html doc $(DEB_SPHINXDOC_DOCHTMLDIR)
-#	PYTHONPATH=$(CURDIR)/src python3 -m sphinx -b latex doc _build/doc-latex
-#	make -C _build/doc-latex all-pdf
-#	## lintian privacy-breach fix
-#	$(foreach htmlsed,$(wildcard $(DEB_SPHINXDOC_HTMLSEDDIR)/*.html.sed), \
-#		sed -i -f $(htmlsed) $(DEB_SPHINXDOC_DOCHTMLDIR)/$(notdir $(patsubst %.sed,%,$(htmlsed))) $(NEWLINE)\
-#		)
-#	for html in $(DEB_SPHINXDOC_DOCHTMLDIR)/*.html $(DEB_SPHINXDOC_DOCHTMLDIR)/subdir/*.html ; do \
-#		sed -i -f $(DEB_SPHINXDOC_HTMLSEDDIR)/common.sed $$html ;\
-#	done
-#	cp -vpr -t $(DEB_SPHINXDOC_DOCHTMLDIR) $(CURDIR)/debian/adhoc/lintian/privacy-breach/www
-#	## lintian duplicate-files fix
-#	rm -r -f -v $(DEB_SPHINXDOC_DOCHTMLDIR)/images
-#	rdfind -outputname /dev/null -makesymlinks true $(DEB_SPHINXDOC_DOCHTMLDIR)
-#	symlinks -r -c -s -v $(DEB_SPHINXDOC_DOCHTMLDIR)
-#	## cf Debian Bug report #739300
-#	ln -s /usr/share/javascript/mathjax $(DEB_SPHINXDOC_DOCHTMLDIR)/_static
-#	## cf d/p/debianization-documentation.patch
-#	ln -r -s $(DEB_SPHINXDOC_DOCHTMLDIR)/_sources $(DEB_SPHINXDOC_DOCHTMLDIR)/doc
-#	dh_sphinxdoc -O--buildsystem=pybuild
-#	cp -vpr -t $(DEB_SPHINXDOC_DOCDIR) _build/doc-latex/nbsphinx.pdf
-#endif
+ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
+	PYTHONPATH=$(CURDIR)/src python3 -m sphinx -b html doc $(DEB_SPHINXDOC_DOCHTMLDIR)
+	PYTHONPATH=$(CURDIR)/src python3 -m sphinx -b latex doc _build/doc-latex
+	make -C _build/doc-latex all-pdf
+	## lintian privacy-breach fix
+	$(foreach htmlsed,$(wildcard $(DEB_SPHINXDOC_HTMLSEDDIR)/*.html.sed), \
+		sed -i -f $(htmlsed) $(DEB_SPHINXDOC_DOCHTMLDIR)/$(notdir $(patsubst %.sed,%,$(htmlsed))) $(NEWLINE)\
+		)
+	for html in $(DEB_SPHINXDOC_DOCHTMLDIR)/*.html $(DEB_SPHINXDOC_DOCHTMLDIR)/subdir/*.html ; do \
+		sed -i -f $(DEB_SPHINXDOC_HTMLSEDDIR)/common.sed $$html ;\
+	done
+	cp -vpr -t $(DEB_SPHINXDOC_DOCHTMLDIR) $(CURDIR)/debian/adhoc/lintian/privacy-breach/www
+	## lintian duplicate-files fix
+	rm -r -f -v $(DEB_SPHINXDOC_DOCHTMLDIR)/images
+	rdfind -outputname /dev/null -makesymlinks true $(DEB_SPHINXDOC_DOCHTMLDIR)
+	symlinks -r -c -s -v $(DEB_SPHINXDOC_DOCHTMLDIR)
+	## cf Debian Bug report #739300
+	ln -s /usr/share/javascript/mathjax $(DEB_SPHINXDOC_DOCHTMLDIR)/_static
+	## cf d/p/debianization-documentation.patch
+	ln -r -s $(DEB_SPHINXDOC_DOCHTMLDIR)/_sources $(DEB_SPHINXDOC_DOCHTMLDIR)/doc
+	dh_sphinxdoc -O--buildsystem=pybuild
+	cp -vpr -t $(DEB_SPHINXDOC_DOCDIR) _build/doc-latex/nbsphinx.pdf
+endif
 
 override_dh_compress:
 	dh_compress -Xwww -Xnbsphinx.pdf

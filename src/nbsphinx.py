@@ -1,4 +1,4 @@
-# Copyright (c) 2015-2021 Matthias Geier
+# Copyright (c) 2015-2022 Matthias Geier
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,12 @@
 https://nbsphinx.readthedocs.io/
 
 """
-__version__ = '0.8.7'
+__version__ = '0.8.11'
 
 import collections.abc
 import copy
 import html
+from itertools import chain
 import json
 import os
 import re
@@ -61,7 +62,7 @@ _ipynbversion = 4
 
 logger = sphinx.util.logging.getLogger(__name__)
 
-_BROKEN_THUMBNAIL = object()
+_BROKEN_THUMBNAIL = None
 
 # See nbconvert/exporters/html.py:
 DISPLAY_DATA_PRIORITY_HTML = (
@@ -161,6 +162,13 @@ RST_TEMPLATE = """
         \\begin{sphinxVerbatim}[commandchars=\\\\\\{\\}]
 {{ output.data[datatype] | escape_latex | ansi2latex | indent | indent }}
         \\end{sphinxVerbatim}
+
+{# NB: The "raw" directive doesn't work with empty content #}
+{%- if output.data[datatype].strip() %}
+    .. raw:: text
+
+{{ output.data[datatype] | indent | indent }}
+{%- endif %}
 
 {%- elif datatype in ['image/svg+xml', 'image/png', 'image/jpeg', 'application/pdf'] %}
 
@@ -292,6 +300,15 @@ RST_TEMPLATE = """
 """.replace('__RST_DEFAULT_TEMPLATE__', nbconvert.RSTExporter().template_file)
 
 
+# MEMO: the nbsphinxfancyoutput environment recycles some internal Sphinx
+# LaTeX macros, as testify the @ in their names.  At 5.1.0 these macros
+# got modified so we now have two cases for the nbsphinxfancyoutput
+# definition: Sphinx >= 5.1.0 or Sphinx < 5.1.0 (and >= 1.7.0 at least).
+
+# MEMO: since Sphinx 2.0 the upstream \sphinxincludegraphics is similar and
+# slightly better than the \nbsphinxincludegraphics defined here.  So for the
+# >= 5.1.0 branch of nbsphinxfancyoutput, the code does no replacement of
+# \sphinxincludegraphics by \nbsphinxincludegraphics anymore.
 LATEX_PREAMBLE = r"""
 % Jupyter Notebook code cell colors
 \definecolor{nbsphinxin}{HTML}{307FC1}
@@ -319,8 +336,50 @@ LATEX_PREAMBLE = r"""
 \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
 \definecolor{ansi-default-inverse-bg}{HTML}{000000}
 
-% Define an environment for non-plain-text code cell outputs (e.g. images)
+% Defaults for all code blocks, including, but not limited to code cells:
+\sphinxsetup{VerbatimColor={named}{nbsphinx-code-bg}}
+\sphinxsetup{VerbatimBorderColor={named}{nbsphinx-code-border}}
 \makeatletter
+\@ifpackagelater{sphinx}{2022/06/30}{% Sphinx >= 5.1.0
+% Restore settings from Sphinx < 5.1.0:
+\sphinxsetup{pre_border-radius=0pt}
+\sphinxsetup{pre_box-decoration-break=clone}
+}{}
+\makeatother
+
+% Define an environment for non-plain-text code cell outputs (e.g. images)
+\newbox\nbsphinxpromptbox
+\makeatletter
+\@ifpackagelater{sphinx}{2022/06/30}{% "later" means here "at least"
+% In this branch Sphinx is at least at 5.1.0
+\newenvironment{nbsphinxfancyoutput}{%
+\sphinxcolorlet{VerbatimColor}{white}%
+\spx@verb@boxes@fcolorbox@setup
+    % for \sphinxincludegraphics check of maximal height
+    \spx@image@maxheight         \textheight
+    \advance\spx@image@maxheight -\spx@boxes@border@top
+    \advance\spx@image@maxheight -\spx@boxes@padding@top
+    \advance\spx@image@maxheight -\spx@boxes@padding@bottom
+    \advance\spx@image@maxheight -\spx@boxes@border@bottom
+    \advance\spx@image@maxheight -\baselineskip
+\def\sphinxVerbatim@Before{\nbsphinxfancyaddprompt}%
+\def\sphinxVerbatim@After {\@empty}%
+\def\FrameCommand     {\sphinxVerbatim@FrameCommand}%
+\def\FirstFrameCommand{\sphinxVerbatim@FirstFrameCommand}%
+\def\MidFrameCommand  {\sphinxVerbatim@MidFrameCommand}%
+\def\LastFrameCommand {\sphinxVerbatim@LastFrameCommand}%
+\MakeFramed{\advance\hsize-\width\@totalleftmargin\z@\linewidth\hsize\@setminipage}%
+\lineskip=1ex\lineskiplimit=1ex\raggedright%
+}{\par\unskip\@minipagefalse\endMakeFramed}
+\def\nbsphinxfancyaddprompt{\ifvoid\nbsphinxpromptbox\else
+    \kern\spx@boxes@border@top\kern\spx@boxes@padding@top
+    \copy\nbsphinxpromptbox
+    \kern-\ht\nbsphinxpromptbox\kern-\dp\nbsphinxpromptbox
+    \kern-\spx@boxes@padding@top\kern-\spx@boxes@border@top
+    \nointerlineskip
+    \fi}
+}% End of Sphinx >= 5.1.0 branch
+{% This branch for Sphinx < 5.1.0
 \newenvironment{nbsphinxfancyoutput}{%
     % Avoid fatal error with framed.sty if graphics too long to fit on one page
     \let\sphinxincludegraphics\nbsphinxincludegraphics
@@ -336,14 +395,14 @@ LATEX_PREAMBLE = r"""
 \MakeFramed{\advance\hsize-\width\@totalleftmargin\z@\linewidth\hsize\@setminipage}%
 \lineskip=1ex\lineskiplimit=1ex\raggedright%
 }{\par\unskip\@minipagefalse\endMakeFramed}
-\makeatother
-\newbox\nbsphinxpromptbox
 \def\nbsphinxfancyaddprompt{\ifvoid\nbsphinxpromptbox\else
     \kern\fboxrule\kern\fboxsep
     \copy\nbsphinxpromptbox
     \kern-\ht\nbsphinxpromptbox\kern-\dp\nbsphinxpromptbox
     \kern-\fboxsep\kern-\fboxrule\nointerlineskip
     \fi}
+}% end of Sphinx < 5.1.0 branch
+\makeatother
 \newlength\nbsphinxcodecellspacing
 \setlength{\nbsphinxcodecellspacing}{0pt}
 
@@ -356,7 +415,7 @@ LATEX_PREAMBLE = r"""
     \setbox\nbsphinxbox\vtop{{#1\par}}
     % reserve some space at bottom of page, else start new page
     \needspace{\dimexpr2.5\baselineskip+\ht\nbsphinxbox+\dp\nbsphinxbox}
-    % mimick vertical spacing from \section command
+    % mimic vertical spacing from \section command
       \addpenalty\@secpenalty
       \@tempskipa 3.5ex \@plus 1ex \@minus .2ex\relax
       \addvspace\@tempskipa
@@ -397,6 +456,8 @@ LATEX_PREAMBLE = r"""
 }% end of \nbsphinxstopnotebook
 
 % Ensure height of an included graphics fits in nbsphinxfancyoutput frame
+% The Sphinx >= 5.1.0 version of nbsphinxfancyoutput does not use this macro
+% as \sphinxincludegraphics is since Sphinx 2.0 similar and slightly better.
 \newdimen\nbsphinx@image@maxheight % set in nbsphinxfancyoutput environment
 \newcommand*{\nbsphinxincludegraphics}[2][]{%
     \gdef\spx@includegraphics@options{#1}%
@@ -544,10 +605,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -644,11 +706,12 @@ div.nboutput.container div.output_area > div[class^='highlight']{
 }
 
 /* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt a.copybtn {
+.prompt .copybtn {
     display: none;
 }
 
 /* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
 div.rendered_html table {
   border: none;
   border-collapse: collapse;
@@ -657,10 +720,14 @@ div.rendered_html table {
   font-size: 12px;
   table-layout: fixed;
 }
+.jp-RenderedHTMLCommon thead,
 div.rendered_html thead {
   border-bottom: 1px solid black;
   vertical-align: bottom;
 }
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
 div.rendered_html tr,
 div.rendered_html th,
 div.rendered_html td {
@@ -672,12 +739,15 @@ div.rendered_html td {
   max-width: none;
   border: none;
 }
+.jp-RenderedHTMLCommon th,
 div.rendered_html th {
   font-weight: bold;
 }
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
 div.rendered_html tbody tr:nth-child(odd) {
   background: #f5f5f5;
 }
+.jp-RenderedHTMLCommon tbody tr:hover,
 div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
@@ -795,7 +865,12 @@ class Exporter(nbconvert.RSTExporter):
                 'save_attachments': save_attachments,
                 'replace_attachments': replace_attachments,
                 'get_output_type': _get_output_type,
-                'json_dumps': json.dumps,
+                'json_dumps': lambda s: re.sub(
+                    r'<(/script)',
+                    r'<\\\1',
+                    json.dumps(s),
+                    flags=re.IGNORECASE,
+                ),
                 'basename': os.path.basename,
                 'dirname': os.path.dirname,
             })
@@ -1056,6 +1131,8 @@ class NotebookParser(rst.Parser):
                 env.config.nbsphinx_prolog).render(env=env)
             rst.Parser.parse(self, prolog, document)
         rst.Parser.parse(self, '.. highlight:: none', document)
+        if 'sphinx_codeautolink' in env.config.extensions:
+            rst.Parser.parse(self, '.. autolink-concat:: on', document)
         rst.Parser.parse(self, rststring, document)
         if env.config.nbsphinx_epilog:
             epilog = exporter.environment.from_string(
@@ -1226,7 +1303,7 @@ class NbGallery(sphinx.directives.other.TocTree):
     """A thumbnail gallery for notebooks."""
 
     def run(self):
-        """Wrap GalleryToc arount toctree."""
+        """Wrap GalleryToc around toctree."""
         ret = super().run()
         try:
             toctree_wrapper = ret[-1]
@@ -1864,10 +1941,14 @@ def patched_toctree_resolve(self, docname, builder, toctree, *args, **kwargs):
 
 
 def config_inited(app, config):
-    if '.ipynb' not in config.source_suffix:
-        app.add_source_suffix('.ipynb', 'jupyter_notebook')
     for suffix in config.nbsphinx_custom_formats:
         app.add_source_suffix(suffix, 'jupyter_notebook')
+    if '.ipynb' in chain(config.source_suffix, app.registry.source_suffix):
+        # We don't interfere if '.ipynb' has been added by the user in conf.py
+        # or by another Sphinx extension that has been loaded earlier.
+        pass
+    else:
+        app.add_source_suffix('.ipynb', 'jupyter_notebook')
 
     if '**.ipynb_checkpoints' not in config.exclude_patterns:
         config.exclude_patterns.append('**.ipynb_checkpoints')
@@ -2128,9 +2209,9 @@ def depart_codearea_html(self, node):
     """Add empty lines before and after the code."""
     text = self.body[-1]
     text = text.replace('<pre>',
-                        '<pre>\n' + '\n' * node.get('empty-lines-before', 0))
+                        '<pre>' + '<br/>' * node.get('empty-lines-before', 0))
     text = text.replace('</pre>',
-                        '\n' * node.get('empty-lines-after', 0) + '</pre>')
+                        '<br/>' * node.get('empty-lines-after', 0) + '</pre>')
     self.body[-1] = text
 
 
@@ -2152,7 +2233,6 @@ def depart_codearea_latex(self, node):
     out.append('{')  # Start a scope for colors
     if 'nbinput' in node.parent['classes']:
         promptcolor = 'nbsphinxin'
-        out.append(r'\sphinxsetup{VerbatimColor={named}{nbsphinx-code-bg}}')
     else:
         out.append(r"""
 \kern-\sphinxverbatimsmallskipamount\kern-\baselineskip
@@ -2164,9 +2244,6 @@ def depart_codearea_latex(self, node):
             out.append(r'\sphinxsetup{VerbatimColor={named}{nbsphinx-stderr}}')
         else:
             out.append(r'\sphinxsetup{VerbatimColor={named}{white}}')
-
-    out.append(
-        r'\sphinxsetup{VerbatimBorderColor={named}{nbsphinx-code-border}}')
     if lines[0].startswith(r'\fvset{'):  # Sphinx >= 1.6.6 and < 1.8.3
         out.append(lines[0])
         del lines[0]
@@ -2249,6 +2326,14 @@ def depart_admonition_latex(self, node):
     self.body.append('\\end{sphinxadmonition}\n')
 
 
+def visit_admonition_text(self, node):
+    self.new_state(0)
+
+
+def depart_admonition_text(self, node):
+    self.end_state()
+
+
 def depart_gallery_html(self, node):
     for title, uri, filename, tooltip in node['entries']:
         if tooltip:
@@ -2313,16 +2398,20 @@ def setup(app):
     app.add_directive('nbgallery', NbGallery)
     app.add_node(CodeAreaNode,
                  html=(do_nothing, depart_codearea_html),
-                 latex=(visit_codearea_latex, depart_codearea_latex))
+                 latex=(visit_codearea_latex, depart_codearea_latex),
+                 text=(do_nothing, do_nothing))
     app.add_node(FancyOutputNode,
                  html=(do_nothing, do_nothing),
-                 latex=(visit_fancyoutput_latex, depart_fancyoutput_latex))
+                 latex=(visit_fancyoutput_latex, depart_fancyoutput_latex),
+                 text=(do_nothing, do_nothing))
     app.add_node(AdmonitionNode,
                  html=(visit_admonition_html, depart_admonition_html),
-                 latex=(visit_admonition_latex, depart_admonition_latex))
+                 latex=(visit_admonition_latex, depart_admonition_latex),
+                 text=(visit_admonition_text, depart_admonition_text))
     app.add_node(GalleryNode,
                  html=(do_nothing, depart_gallery_html),
-                 latex=(do_nothing, do_nothing))
+                 latex=(do_nothing, do_nothing),
+                 text=(do_nothing, do_nothing))
     app.connect('builder-inited', builder_inited)
     app.connect('config-inited', config_inited)
     app.connect('html-page-context', html_page_context)
@@ -2356,5 +2445,5 @@ def setup(app):
         'version': __version__,
         'parallel_read_safe': True,
         'parallel_write_safe': True,
-        'env_version': 3,
+        'env_version': 4,
     }

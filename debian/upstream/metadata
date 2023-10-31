@@ -1,9 +1,7 @@
 Archive: Python/Jupyter
 Bug-Database: https://github.com/spatialaudio/nbsphinx/issues
 Bug-Submit: https://github.com/spatialaudio/nbsphinx/issues/new
-Homepage: https://github.com/spatialaudio/nbsphinx
 Other-References: https://pypi.python.org/pypi/nbsphinx/
 Documentation: http://nbsphinx.readthedocs.io/
 Repository: https://github.com/spatialaudio/nbsphinx.git
 Repository-Browse: https://github.com/spatialaudio/nbsphinx
-watch: https://pypi.debian.net/nbsphinx/nbsphinx-(.+)\.(?:zip|tgz|tbz|txz|(?:tar\.(?:gz|bz2|xz)))

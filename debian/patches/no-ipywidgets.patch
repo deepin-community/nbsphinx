@@ -1,0 +1,106 @@
+Description: remove examples that use ipywidgets
+ The current version of ipywidgets in Debian (6.0.0) is broken.
+Origin: vendor, Debian
+Forwarded: not-needed
+Author: Dmitry Shachnev <mitya57@debian.org>
+Last-Update: 2022-12-03
+
+--- a/doc/code-cells.ipynb
++++ b/doc/code-cells.ipynb
+@@ -636,96 +636,6 @@
+     "settings."
+    ]
+   },
+-  {
+-   "cell_type": "code",
+-   "execution_count": null,
+-   "metadata": {},
+-   "outputs": [],
+-   "source": [
+-    "import ipywidgets as w"
+-   ]
+-  },
+-  {
+-   "cell_type": "code",
+-   "execution_count": null,
+-   "metadata": {},
+-   "outputs": [],
+-   "source": [
+-    "slider = w.IntSlider()\n",
+-    "slider.value = 42\n",
+-    "slider"
+-   ]
+-  },
+-  {
+-   "cell_type": "markdown",
+-   "metadata": {},
+-   "source": [
+-    "A widget typically consists of a so-called \"model\" and a \"view\" into that model.\n",
+-    "\n",
+-    "If you display a widget multiple times,\n",
+-    "all instances act as a \"view\" into the same \"model\".\n",
+-    "That means that their state is synchronized.\n",
+-    "You can move either one of these sliders to try this out:"
+-   ]
+-  },
+-  {
+-   "cell_type": "code",
+-   "execution_count": null,
+-   "metadata": {},
+-   "outputs": [],
+-   "source": [
+-    "slider"
+-   ]
+-  },
+-  {
+-   "cell_type": "markdown",
+-   "metadata": {},
+-   "source": [
+-    "You can also link different widgets.\n",
+-    "\n",
+-    "Widgets can be linked via the kernel\n",
+-    "(which of course only works while a kernel is running)\n",
+-    "or directly in the client\n",
+-    "(which even works in the rendered HTML pages).\n",
+-    "\n",
+-    "Widgets can be linked uni- or bi-directionally.\n",
+-    "\n",
+-    "Examples for all 4 combinations are shown here:"
+-   ]
+-  },
+-  {
+-   "cell_type": "code",
+-   "execution_count": null,
+-   "metadata": {},
+-   "outputs": [],
+-   "source": [
+-    "link = w.IntSlider(description='link')\n",
+-    "w.link((slider, 'value'), (link, 'value'))\n",
+-    "jslink = w.IntSlider(description='jslink')\n",
+-    "w.jslink((slider, 'value'), (jslink, 'value'))\n",
+-    "dlink = w.IntSlider(description='dlink')\n",
+-    "w.dlink((slider, 'value'), (dlink, 'value'))\n",
+-    "jsdlink = w.IntSlider(description='jsdlink')\n",
+-    "w.jsdlink((slider, 'value'), (jsdlink, 'value'))\n",
+-    "w.VBox([link, jslink, dlink, jsdlink])"
+-   ]
+-  },
+-  {
+-   "cell_type": "code",
+-   "execution_count": null,
+-   "metadata": {},
+-   "outputs": [],
+-   "source": [
+-    "tabs = w.Tab()\n",
+-    "for idx, obj in enumerate([df, fig, eq, i, md, slider]):\n",
+-    "    out = w.Output()\n",
+-    "    with out:\n",
+-    "        display(obj)\n",
+-    "    tabs.children += out,\n",
+-    "    tabs.set_title(idx, obj.__class__.__name__)\n",
+-    "tabs"
+-   ]
+-  },
+   {
+    "cell_type": "markdown",
+    "metadata": {},
