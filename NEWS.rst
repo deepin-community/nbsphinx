@@ -1,3 +1,61 @@
+Version 0.9.5 -- 2024-08-13 -- PyPI__ -- diff__
+ * Miscellaneous fixes
+
+__ https://pypi.org/project/nbsphinx/0.9.5/
+__ https://github.com/spatialaudio/nbsphinx/compare/0.9.4...0.9.5
+
+Version 0.9.4 -- 2024-05-06 -- PyPI__ -- diff__
+ * Require ``docutils >= 0.18.1``
+ * Minor fixes, documentation and CI updates
+
+__ https://pypi.org/project/nbsphinx/0.9.4/
+__ https://github.com/spatialaudio/nbsphinx/compare/0.9.3...0.9.4
+
+Version 0.9.3 -- 2023-08-27 -- PyPI__ -- diff__
+ * Fix gallery regression in Sphinx 7.2
+
+__ https://pypi.org/project/nbsphinx/0.9.3/
+__ https://github.com/spatialaudio/nbsphinx/compare/0.9.2...0.9.3
+
+Version 0.9.2 -- 2023-05-24 -- PyPI__ -- diff__
+ * Improve support for ``sphinx_immaterial`` theme
+ * Improve support for links starting with ``#``
+ * Add support for in-text citations
+ * LaTeX: Add support for admonition titles
+
+__ https://pypi.org/project/nbsphinx/0.9.2/
+__ https://github.com/spatialaudio/nbsphinx/compare/0.9.1...0.9.2
+
+Version 0.9.1 -- 2023-03-14 -- PyPI__ -- diff__
+ * pandoc: disable "smart" option only for version 2.0+
+
+__ https://pypi.org/project/nbsphinx/0.9.1/
+__ https://github.com/spatialaudio/nbsphinx/compare/0.9.0...0.9.1
+
+Version 0.9.0 -- 2023-03-12 -- PyPI__ -- diff__
+ * Split ``nbsphinx.py`` (a Python *module*) into:
+
+   * ``nbsphinx/__init__.py`` (a Python *package*)
+   * A standalone CSS file ``nbsphinx-code-cells.css_t``
+   * LaTeX style file ``nbsphinx.sty``
+
+ * Add custom HTML/CSS for thumbnail galleries
+
+   * Separate CSS file ``nbsphinx-gallery.css``
+   * The CSS from Sphinx Gallery (``'sphinx_gallery.load_style'``)
+     cannot be used anymore
+
+ * Use the last image in a notebook as the default thumbnail
+
+__ https://pypi.org/project/nbsphinx/0.9.0/
+__ https://github.com/spatialaudio/nbsphinx/compare/0.8.12...0.9.0
+
+Version 0.8.12 -- 2023-01-19 -- PyPI__ -- diff__
+ * Implement "link" galleries (without nested sub-documents)
+
+__ https://pypi.org/project/nbsphinx/0.8.12/
+__ https://github.com/spatialaudio/nbsphinx/compare/0.8.11...0.8.12
+
 Version 0.8.11 -- 2022-12-29 -- PyPI__ -- diff__
  * LaTeX: apply code cell border style to all code blocks
 

@@ -7,9 +7,9 @@ Last-Update: 2021-10-03
 
 --- nbsphinx.orig/doc/conf.py
 +++ nbsphinx/doc/conf.py
-@@ -98,12 +98,6 @@
- 
+@@ -103,12 +103,6 @@
  bibtex_bibfiles = ['references.bib']
+ bibtex_reference_style = 'author_year'
  
 -# Support for notebook formats other than .ipynb
 -nbsphinx_custom_formats = {
@@ -24,7 +24,7 @@ Last-Update: 2021-10-03
 +++ nbsphinx/doc/index.rst
 @@ -5,12 +5,6 @@
  except for the sections :doc:`a-normal-rst-file`,
- :doc:`contributing` and :doc:`version-history`,
+ :doc:`contributing`, :doc:`references` and :doc:`version-history`,
  which were generated from Sphinx's built-in `reStructuredText`__ format.
 -The sections
 -:doc:`custom-formats`,
@@ -35,7 +35,7 @@ Last-Update: 2021-10-03
  
  __ https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
  
-@@ -26,11 +20,9 @@
+@@ -32,11 +26,9 @@
      hidden-cells
      executing-notebooks
      prolog-and-epilog
@@ -46,4 +46,4 @@ Last-Update: 2021-10-03
 -    a-markdown-file
      links
      contributing
-     version-history
+     references

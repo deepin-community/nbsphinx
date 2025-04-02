@@ -80,7 +80,7 @@ Links to Notebooks, Ye Olde Way
 
 In addition to the way shown above, you can also create links to notebooks (and
 other Sphinx source files) with
-`:ref: <https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-ref>`_.
+`:ref: <https://www.sphinx-doc.org/en/master/usage/referencing.html#role-ref>`_.
 This has some disadvantages:
 
 * It is arguably a bit more clunky.
@@ -187,6 +187,7 @@ your ``conf.py`` and select the BibTeX file(s) you want to use:
     ]
 
     bibtex_bibfiles = ['my-references.bib']
+    bibtex_reference_style = 'author_year'
 
 Afterwards all the references defined in the bibliography file(s) can be used
 throughout the Jupyter notebooks and other source files as detailed in the following.
@@ -204,6 +205,14 @@ You can create citations like :cite:`perez2011python`:
 
     :cite:`perez2011python`
 
+You can also create so-called in-text citations,
+where the names of the authors, for example :cite:t:`perez2011python`,
+are part of the sentence:
+
+.. code-block:: rst
+
+    :cite:t:`perez2011python`
+
 You can create similar citations in Jupyter notebooks with a special HTML
 syntax, see the section about
 `citations in Markdown cells <markdown-cells.ipynb#Citations>`__.
@@ -215,17 +224,8 @@ You can create a list of references in any reStructuredText file
 
     .. bibliography::
 
-Have a look at the documentation for all the available options.
+For an example, see the file ``doc/references.rst``.
 
-The list of references may look something like this (in HTML output):
-
-.. bibliography::
-    :style: alpha
-
-However, in the LaTeX/PDF output the list of references will not appear here,
-but at the end of the document.
-For a possible work-around,
-see https://github.com/mcmtroffaes/sphinxcontrib-bibtex/issues/156.
 
 Footnote citations
 ^^^^^^^^^^^^^^^^^^
@@ -237,6 +237,12 @@ citations like :footcite:`perez2011python`.
 .. code-block:: rst
 
     :footcite:`perez2011python`
+
+In-text citations like :footcite:t:`kluyver2016jupyter` can be created like this:
+
+.. code-block:: rst
+
+    :footcite:t:`kluyver2016jupyter`
 
 Also footnote citations can be used within Jupyter notebooks with a special HTML syntax,
 see the section about
@@ -258,15 +264,48 @@ here. Instead, the footnote citations are placed into the footnotes of
 their respective pages.
 
 
+Thumbnail Link Galleries (HTML only)
+-------------------------------------
+
+In some case it is desired to create thumbnail links to existing notebooks,
+already included in a ``toctree``. This can be used e.g. to link to a subset
+of notebooks from API documentation to highlight the use of some functionality.
+For this there is a dedicated ``nblinkgallery`` directive.
+
+The following example gallery was created using:
+
+.. code-block:: rest
+
+    .. nblinkgallery::
+        :caption: A few links
+        :name: rst-link-gallery
+
+        gallery/multiple-outputs
+        gallery/no-thumbnail
+        gallery/cell-metadata
+        orphan
+
+.. nblinkgallery::
+    :caption: A few links
+    :name: rst-link-gallery
+
+    gallery/multiple-outputs
+    gallery/no-thumbnail
+    gallery/cell-metadata
+    orphan
+
+.. seealso::
+
+    `Link Galleries in Jupyter Notebooks <gallery/gallery-with-links.ipynb>`_
+
+
 Thumbnail Galleries
 -------------------
 
 With ``nbsphinx`` you can create thumbnail galleries in notebook files
-as described in :ref:`/subdir/gallery.ipynb`.
-
+as described in :ref:`/gallery/gallery-with-nested-documents.ipynb`.
 If you like, you can also create such galleries in reST files
 using the ``nbgallery`` directive.
-
 It takes the same parameters as the `toctree`__ directive.
 
 __ https://www.sphinx-doc.org/en/master/usage/restructuredtext/
@@ -274,7 +313,7 @@ __ https://www.sphinx-doc.org/en/master/usage/restructuredtext/
 
 .. note::
 
-    The notes regarding LaTeX in :ref:`/subdir/gallery.ipynb`
+    The notes regarding LaTeX in :ref:`/gallery/gallery-with-nested-documents.ipynb`
     and :ref:`/subdir/toctree.ipynb` also apply here!
 
 The following example gallery was created using:

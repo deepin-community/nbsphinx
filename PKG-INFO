@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: nbsphinx
-Version: 0.8.11
+Version: 0.9.5
 Summary: Jupyter Notebook Tools for Sphinx
 Home-page: https://nbsphinx.readthedocs.io/
 Author: Matthias Geier
@@ -23,6 +23,12 @@ Classifier: Programming Language :: Python :: 3
 Classifier: Topic :: Documentation :: Sphinx
 Requires-Python: >=3.6
 License-File: LICENSE
+Requires-Dist: docutils>=0.18.1
+Requires-Dist: jinja2
+Requires-Dist: nbconvert!=5.4,>=5.3
+Requires-Dist: traitlets>=5
+Requires-Dist: nbformat
+Requires-Dist: sphinx>=1.8
 
 Jupyter Notebook Tools for Sphinx
 =================================

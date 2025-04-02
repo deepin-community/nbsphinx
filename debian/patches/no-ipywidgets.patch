@@ -7,11 +7,10 @@ Last-Update: 2022-12-03
 
 --- a/doc/code-cells.ipynb
 +++ b/doc/code-cells.ipynb
-@@ -636,96 +636,6 @@
-     "settings."
+@@ -565,96 +565,6 @@
     ]
    },
--  {
+   {
 -   "cell_type": "code",
 -   "execution_count": null,
 -   "metadata": {},
@@ -101,6 +100,7 @@ Last-Update: 2022-12-03
 -    "tabs"
 -   ]
 -  },
-   {
+-  {
     "cell_type": "markdown",
     "metadata": {},
+    "source": [

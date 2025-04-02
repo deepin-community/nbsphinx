@@ -1,3 +1,4 @@
+debian-docs-intersphinx
 debianization-documentation.patch
 no-jupytext.patch
 skip_codeautolink

@@ -7,10 +7,10 @@ Last-Update: 2020-12-13
 
 --- nbsphinx.orig/doc/conf.py
 +++ nbsphinx/doc/conf.py
-@@ -9,11 +9,22 @@
+@@ -8,11 +8,21 @@
+     'nbsphinx',
      'sphinxcontrib.bibtex',  # for bibliographic references
      'sphinxcontrib.rsvgconverter',  # for SVG->PDF conversion in LaTeX output
-     'sphinx_gallery.load_style',  # load CSS for gallery (needs SG >= 0.6)
 -    'sphinx_last_updated_by_git',  # get "last updated" from Git
      'sphinx_codeautolink',  # automatic links from code to documentation
      'sphinx.ext.intersphinx',  # links to other Sphinx projects (e.g. NumPy)
@@ -27,11 +27,10 @@ Last-Update: 2020-12-13
 +## Link or path to require.js
 +nbsphinx_requirejs_path = '/usr/lib/nodejs/requirejs/require.js'
 +
-+
  # These projects are also used for the sphinx_codeautolink extension:
  intersphinx_mapping = {
-     'IPython': ('https://ipython.readthedocs.io/en/stable/', None),
-@@ -113,17 +124,10 @@
+     'IPython': ('/usr/share/doc/python-ipython-doc/html/', None),
+@@ -121,17 +131,10 @@
  
  nitpicky = True
  

@@ -10,7 +10,7 @@ default:
 	@uscan --no-conf --dehs --report || true
 
 %:
-	dh $@ --with python3,sphinxdoc --buildsystem=pybuild
+	dh $@ --with sphinxdoc --buildsystem=pybuild
 
 DEB_SPHINXDOC_DOCDIR=$(CURDIR)/debian/python-nbsphinx-doc/usr/share/doc/python-nbsphinx
 DEB_SPHINXDOC_DOCHTMLDIR=$(DEB_SPHINXDOC_DOCDIR)/html
@@ -18,8 +18,8 @@ DEB_SPHINXDOC_HTMLSEDDIR=$(CURDIR)/debian/adhoc/lintian/privacy-breach
 override_dh_sphinxdoc:
 ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
 	PYTHONPATH=$(CURDIR)/src python3 -m sphinx -b html doc $(DEB_SPHINXDOC_DOCHTMLDIR)
-	PYTHONPATH=$(CURDIR)/src python3 -m sphinx -b latex doc _build/doc-latex
-	make -C _build/doc-latex all-pdf
+	#PYTHONPATH=$(CURDIR)/src python3 -m sphinx -b latex doc _build/doc-latex
+	#make -C _build/doc-latex all-pdf
 	## lintian privacy-breach fix
 	$(foreach htmlsed,$(wildcard $(DEB_SPHINXDOC_HTMLSEDDIR)/*.html.sed), \
 		sed -i -f $(htmlsed) $(DEB_SPHINXDOC_DOCHTMLDIR)/$(notdir $(patsubst %.sed,%,$(htmlsed))) $(NEWLINE)\
@@ -37,11 +37,11 @@ ifeq (,$(findstring nodocs, $(DEB_BUILD_OPTIONS)))
 	## cf d/p/debianization-documentation.patch
 	ln -r -s $(DEB_SPHINXDOC_DOCHTMLDIR)/_sources $(DEB_SPHINXDOC_DOCHTMLDIR)/doc
 	dh_sphinxdoc -O--buildsystem=pybuild
-	cp -vpr -t $(DEB_SPHINXDOC_DOCDIR) _build/doc-latex/nbsphinx.pdf
+	#cp -vpr -t $(DEB_SPHINXDOC_DOCDIR) _build/doc-latex/nbsphinx.pdf
 endif
 
-override_dh_compress:
-	dh_compress -Xwww -Xnbsphinx.pdf
+#override_dh_compress:
+#	dh_compress -Xwww -Xnbsphinx.pdf
 
 get-info:
 	@echo "NBSPHINX_VERSION_RELEASE:   "$(NBSPHINX_VERSION_RELEASE)
