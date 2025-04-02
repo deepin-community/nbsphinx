@@ -1,20 +1,20 @@
 Author: Michael R. Crusoe <crusoe@debian.org>
 Description: Skip codeautolink, it is not yet packaged for Debian
 Forwarded: not-needed
---- nbsphinx.orig/doc/conf.py
-+++ nbsphinx/doc/conf.py
-@@ -9,7 +9,6 @@
+--- a/doc/conf.py
++++ b/doc/conf.py
+@@ -8,7 +8,6 @@
+     'nbsphinx',
      'sphinxcontrib.bibtex',  # for bibliographic references
      'sphinxcontrib.rsvgconverter',  # for SVG->PDF conversion in LaTeX output
-     'sphinx_gallery.load_style',  # load CSS for gallery (needs SG >= 0.6)
 -    'sphinx_codeautolink',  # automatic links from code to documentation
      'sphinx.ext.intersphinx',  # links to other Sphinx projects (e.g. NumPy)
  ]
  
---- nbsphinx.orig/doc/requirements.txt
-+++ nbsphinx/doc/requirements.txt
-@@ -8,4 +8,3 @@
- sphinx-gallery
+--- a/doc/requirements.txt
++++ b/doc/requirements.txt
+@@ -11,4 +11,3 @@
+ ipywidgets
  jupytext
  sphinx-last-updated-by-git
 -sphinx-codeautolink

@@ -4,17 +4,9 @@ Subject: Improve reproducibility of the docs
 Using a trick suggested by Chris Lamb
 
 https://salsa.debian.org/reproducible-builds/reproducible-notes/-/commit/1a6e07128ad003c350676cef1c18f8eabeeae2ef
---- nbsphinx.orig/doc/code-cells.ipynb
-+++ nbsphinx/doc/code-cells.ipynb
-@@ -467,6 +467,7 @@
-    "metadata": {},
-    "outputs": [],
-    "source": [
-+    "np.random.seed(0)\n",
-     "df = pd.DataFrame(np.random.randint(0, 100, size=[5, 4]),\n",
-     "                  columns=['a', 'b', 'c', 'd'])\n",
-     "df"
-@@ -545,6 +546,7 @@
+--- a/doc/code-cells.ipynb
++++ b/doc/code-cells.ipynb
+@@ -473,6 +473,7 @@
     "metadata": {},
     "outputs": [],
     "source": [

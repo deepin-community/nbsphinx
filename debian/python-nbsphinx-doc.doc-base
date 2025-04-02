@@ -10,8 +10,8 @@ Abstract:
  automatically executed during the Sphinx build process.
 Section: Programming/Python
 
-Format: PDF
-Files: /usr/share/doc/python-nbsphinx/nbsphinx.pdf
+#Format: PDF
+#Files: /usr/share/doc/python-nbsphinx/nbsphinx.pdf
 
 Format: HTML
 Index: /usr/share/doc/python-nbsphinx/html/index.html

@@ -1,0 +1,20 @@
+Author: Michael R. Crusoe <crusoe@debian.org>
+Description: Link to the packaged documentation of other Python libraries
+Forwarded: not-needed
+--- nbsphinx.orig/doc/conf.py
++++ nbsphinx/doc/conf.py
+@@ -15,11 +15,11 @@
+ 
+ # These projects are also used for the sphinx_codeautolink extension:
+ intersphinx_mapping = {
+-    'IPython': ('https://ipython.readthedocs.io/en/stable/', None),
++    'IPython': ('/usr/share/doc/python-ipython-doc/html/', None),
+     'matplotlib': ('https://matplotlib.org/', None),
+     'numpy': ('https://docs.scipy.org/doc/numpy/', None),
+-    'pandas': ('https://pandas.pydata.org/docs/', None),
+-    'python': ('https://docs.python.org/3/', None),
++    'pandas': ('/usr/share/doc/python-pandas-doc/html/', None),
++    'python': ('/usr/share/doc/python3/html/', None),
+ }
+ 
+ # Don't add .txt suffix to source files:
